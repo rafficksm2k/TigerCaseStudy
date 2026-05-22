@@ -1,0 +1,154 @@
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 20px;
+}
+
+th {
+    text-align: left;
+}
+
+table {
+    width: 100%
+}
+
+table thead tr {
+    background-color: #1d2eab;
+    color: white;
+}
+
+.form-control {
+    width: 20%;
+    height: 38px;
+}
+
+.btn-group {
+    margin: 15px;
+}
+
+.btn-update {
+    margin-right: 10px;
+}
+
+.btn-upload {
+    margin: 0px 15px;
+}
+
+.select-cn {
+    width: 20%;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.search-flex {
+    display: flex;
+    align-items: center;
+    /* font-weight: bold; */
+}
+
+.upload-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-clear {
+    margin-left: 20px;
+    background-color: #1d2eab;
+}
+
+.upload-cn {
+    display: flex;
+}
+
+.pagination-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* ======= */
+
+.header {
+    overflow: hidden;
+    background-color: #c5cbf5;
+    height: 75px;
+}
+
+.header a {
+    float: left;
+    color: black;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 25px;
+    border-radius: 4px;
+}
+
+.header a.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.header a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.header a.active {
+    background-color: dodgerblue;
+    color: white;
+}
+
+.header-right {
+    float: right;
+    margin-top:20px;
+}
+
+@media screen and (max-width: 500px) {
+    .header a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+
+    .header-right {
+        float: none;
+    }
+}
+
+
+
+#logo-id {
+    height: 75px;
+    width: 120px;
+}
+
+#logo-id img {
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    display: block;
+}
+
+.header-name {
+    position: absolute;
+    font-size: 25px;
+    top: 18px;
+    left: 45%;
+}
+
+.header a.contact-cn {
+    background-color: #1d2eab;
+    color: white;
+    margin-right: 10px;
+}
