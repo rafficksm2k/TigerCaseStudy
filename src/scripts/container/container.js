@@ -18,6 +18,8 @@ function Container(props) {
     const [tableViewProducts, setTableViewProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState({});
 
+    const { store } = storeContext;
+
     function convert(string) {
         let lines = string.split("\n");
         let result = [];
@@ -39,7 +41,7 @@ function Container(props) {
     }
 
     function handleChange(newValue, storeId, sku) {
-        setSelectedProduct(storeContext.store.products.find((product) => {
+        setSelectedProduct(store.products.find((product) => {
             return (storeId === product.StoreID && sku === product.SKU);
         }));
         storeContext.dispatch({ type: SET_SHOW_TABLE, showTable: newValue });
@@ -56,8 +58,8 @@ function Container(props) {
                     const csvArray = convert(e.target.result.trim());
                     storeContext.dispatch({ type: SET_PRODUCT, products: csvArray });
                     storeContext.dispatch({ type: SET_TABLE_SIZE, tableSize: csvArray.length });
-                    const firstPageIndex = (storeContext.store.currentPage - 1) * storeContext.store.pageSize;
-                    const lastPageIndex = firstPageIndex + storeContext.store.pageSize;
+                    const firstPageIndex = (store.currentPage - 1) * store.pageSize;
+                    const lastPageIndex = firstPageIndex + store.pageSize;
                     storeContext.dispatch({ type: SET_FILTERED_PRODUCT, filteredProduct: csvArray });
                     setTableViewProducts(csvArray.slice(firstPageIndex, lastPageIndex));
 
@@ -80,8 +82,8 @@ function Container(props) {
 
     function onUpdate(updatedValue, event) {
         if (event === 'update') {
-            const currentIndex = storeContext.store.products.findIndex((product) => (product.StoreID === updatedValue.StoreID && product.SKU === updatedValue.SKU));
-            const newProducts = [...storeContext.store.products];
+            const currentIndex = store.products.findIndex((product) => (product.StoreID === updatedValue.StoreID && product.SKU === updatedValue.SKU));
+            const newProducts = [...store.products];
             newProducts[currentIndex] = updatedValue;
             storeContext.dispatch({ type: SET_PRODUCT, products: newProducts });
             defaultTabelViewData(newProducts);
@@ -106,7 +108,7 @@ function Container(props) {
             defaultTabelViewData();
             return;
         }
-        const filteredData = storeContext.store.products.filter(
+        const filteredData = store.products.filter(
             (product) => product[key].toLowerCase().includes(value.toLowerCase())
         );
         storeContext.dispatch({ type: SET_TABLE_SIZE, tableSize: filteredData.length });
@@ -114,45 +116,45 @@ function Container(props) {
     }
 
     function defaultTabelViewData(value) {
-        const firstPageIndex = (storeContext.store.currentPage - 1) * storeContext.store.pageSize;
-        const lastPageIndex = firstPageIndex + storeContext.store.pageSize;
+        const firstPageIndex = (store.currentPage - 1) * store.pageSize;
+        const lastPageIndex = firstPageIndex + store.pageSize;
         if (value) {
             storeContext.dispatch({ type: SET_FILTERED_PRODUCT, filteredProduct: value });
             setTableViewProducts(value.slice(firstPageIndex, lastPageIndex));
         } else {
             storeContext.dispatch({ type: SET_FILTERED_PRODUCT, filteredProduct: [] });
-            setTableViewProducts(storeContext.store.products.slice(firstPageIndex, lastPageIndex));
-            storeContext.dispatch({ type: SET_TABLE_SIZE, tableSize: storeContext.store.products.length });
+            setTableViewProducts(store.products.slice(firstPageIndex, lastPageIndex));
+            storeContext.dispatch({ type: SET_TABLE_SIZE, tableSize: store.products.length });
         }
     }
 
     function onPageChange(page) {
         storeContext.dispatch({ type: SET_CURRENT_PAGE, currentPage: page });
 
-        const firstPageIndex = (page - 1) * storeContext.store.pageSize;
-        const lastPageIndex = firstPageIndex + storeContext.store.pageSize;
-        setTableViewProducts(storeContext.store.filteredProduct.slice(firstPageIndex, lastPageIndex));
+        const firstPageIndex = (page - 1) * store.pageSize;
+        const lastPageIndex = firstPageIndex + store.pageSize;
+        setTableViewProducts(store.filteredProduct.slice(firstPageIndex, lastPageIndex));
     }
 
     return (
-        <React.Fragment>
+        <>
             <Header />
             <hr />
-            {!storeContext.store.showTable && <Upload uploadFile={() => uploadFile()} />}
-            {storeContext.store.showTable && <div>
-                <Search onSearch={onSearch} uploadNew={uploadNew} />
-                <hr />
-                <Table productHeader={storeContext.store.header} products={tableViewProducts} handleChange={handleChange} />}
-                <Pagination
-                    className="pagination-bar"
-                    currentPage={storeContext.store.currentPage}
-                    totalCount={storeContext.store.tableSize}
-                    pageSize={storeContext.store.pageSize}
-                    onPageChange={page => onPageChange(page)}
-                /> </div>}
-            {storeContext.store.editTable && <Edit selectedProduct={selectedProduct} onUpdate={onUpdate} />}
-            <Footer />
-        </React.Fragment>
+            {!store.showTable ? (<Upload uploadFile={uploadFile} />)
+                : (<>
+                    <Search onSearch={onSearch} uploadNew={uploadNew} />
+                    <hr />
+                    <Table productHeader={store.header} products={tableViewProducts} handleChange={handleChange} />
+                    <Pagination
+                        className="pagination-bar"
+                        currentPage={store.currentPage}
+                        totalCount={store.tableSize}
+                        pageSize={store.pageSize}
+                        onPageChange={onPageChange}
+                    /> </>
+                )}
+            {store.editTable && (<Edit selectedProduct={selectedProduct} onUpdate={onUpdate} />)}
+        </>
     );
 }
 
